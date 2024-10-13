@@ -17,23 +17,23 @@ public class MovieService {
         this.repository = repository;
     }
 
-    public List<Movie> getAllMoviesRepository() {
+    public List<Movie> findAll() {
         return repository.findAll();
     }
 
-    public Movie getMovieById(String id) {
+    public Movie findById(String id) {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Movie> getMoviesByTitle(String title) {
+    public List<Movie> findByTitle(String title) {
         return repository.findByTitle(title);
     }
 
-    public Movie saveMovie(Movie movie) {
+    public Movie save(Movie movie) {
         return repository.save(movie);
     }
 
-    public void deleteMovie(String id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 }

@@ -19,27 +19,27 @@ public class MovieController {
     }
 
     @GetMapping()
-    public List<Movie> getAllMoviesRepository() {
-        return service.getAllMoviesRepository();
+    public List<Movie> findAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable String id) {
-        return service.getMovieById(id);
+    public Movie findById(@PathVariable String id) {
+        return service.findById(id);
     }
 
     @GetMapping("/search")
-    public List<Movie> getMoviesByTitle(@RequestParam String title) {
-        return service.getMoviesByTitle(title);
+    public List<Movie> findByTitle(@RequestParam String title) {
+        return service.findByTitle(title);
     }
 
     @PostMapping
-    public Movie createMovie(@RequestBody Movie movie) {
-        return service.saveMovie(movie);
+    public Movie save(@RequestBody Movie movie) {
+        return service.save(movie);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable String id) {
-        service.deleteMovie(id);
+    public void deleteById(@PathVariable String id) {
+        service.deleteById(id);
     }
 }
