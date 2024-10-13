@@ -2,12 +2,11 @@ package com.example.microservicesmongodb.controller;
 
 import com.example.microservicesmongodb.records.Movie;
 import com.example.microservicesmongodb.service.MovieService;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Log4j2
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
@@ -41,5 +40,25 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable String id) {
         service.deleteById(id);
+    }
+
+    @GetMapping("/year/{year}")
+    public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable int year) {
+        List<Movie> movies = service.getMoviesByYear(year);
+        if (movies.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(movies);
+    }
+
+    @GetMapping("/year-range")
+    public ResponseEntity<List<Movie>> getMoviesByYearRange(
+            @RequestParam int startYear,
+            @RequestParam int endYear) {
+        List<Movie> movies = service.getMoviesByYearRange(startYear, endYear);
+        if (movies.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(movies);
     }
 }

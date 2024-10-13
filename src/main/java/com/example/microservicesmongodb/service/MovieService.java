@@ -1,39 +1,56 @@
 package com.example.microservicesmongodb.service;
 
+
 import com.example.microservicesmongodb.records.Movie;
-import com.example.microservicesmongodb.repositories.MovieRepository;
-import lombok.extern.log4j.Log4j2;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Log4j2
 @Service
 public class MovieService {
 
-    private final MovieRepository repository;
+    private final MongoTemplate template;
 
-    public MovieService(MovieRepository repository) {
-        this.repository = repository;
+    public MovieService(MongoTemplate template) {
+        this.template = template;
     }
 
     public List<Movie> findAll() {
-        return repository.findAll();
+        return template.findAll(Movie.class);
     }
 
     public Movie findById(String id) {
-        return repository.findById(id).orElse(null);
+        Query query = new Query(Criteria.where("_id").is(new ObjectId(id)));
+        return template.findOne(query, Movie.class);
     }
 
     public List<Movie> findByTitle(String title) {
-        return repository.findByTitle(title);
+        Query query = new Query(Criteria.where("title").is(title));
+        return template.find(query, Movie.class);
     }
 
     public Movie save(Movie movie) {
-        return repository.save(movie);
+        return template.save(movie);
     }
 
     public void deleteById(String id) {
-        repository.deleteById(id);
+        Query query = new Query(Criteria.where("_id").is(new ObjectId(id)));
+        template.remove(query, Movie.class);
+    }
+
+    // Retrieve movies by year
+    public List<Movie> getMoviesByYear(int year) {
+        Query query = new Query(Criteria.where("year").is(year));
+        return template.find(query, Movie.class);
+    }
+
+    // Example: Retrieve movies by a range of years
+    public List<Movie> getMoviesByYearRange(int startYear, int endYear) {
+        Query query = new Query(Criteria.where("year").gte(startYear).lte(endYear));
+        return template.find(query, Movie.class);
     }
 }
