@@ -2,6 +2,7 @@ package com.example.microservicesmongodb.controller;
 
 import com.example.microservicesmongodb.records.Movie;
 import com.example.microservicesmongodb.service.MovieService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,10 @@ public class MovieController {
     }
 
     @GetMapping()
-    public List<Movie> findAll() {
-        return service.findAll();
+    public Page<Movie> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        return service.findAll(page, size);
     }
 
     @GetMapping("/{id}")

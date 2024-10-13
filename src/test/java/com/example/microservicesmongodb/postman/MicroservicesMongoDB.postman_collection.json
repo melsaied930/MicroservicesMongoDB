@@ -169,6 +169,11 @@
 							"pm.test(\"Response status code is 200\", function () {",
 							"    pm.expect(pm.response.code).to.equal(200);",
 							"});",
+							"",
+							"pm.test(\"The response array contains 100 objects\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.content).to.have.lengthOf(100);",
+							"});",
 							""
 						],
 						"type": "text/javascript",
@@ -195,6 +200,21 @@
 		},
 		{
 			"name": "/movies/year/2005",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -216,6 +236,36 @@
 		},
 		{
 			"name": "/movies/year-range?startYear=2009&endYear=2010",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Validate required fields in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+							"",
+							"    responseData.forEach(function(movie) {",
+							"        pm.expect(movie).to.include.all.keys(",
+							"            'id', 'plot', 'genres', 'runtime', 'cast', 'numMflixComments', ",
+							"            'poster', 'title', 'fullPlot', 'languages', 'released', ",
+							"            'directors', 'writers', 'awards', 'lastUpdated', 'year', ",
+							"            'imdb', 'countries', 'type', 'tomatoes', 'plotEmbedding'",
+							"        );",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -287,6 +337,60 @@
 						{
 							"key": "cast",
 							"value": "Gilbert%20M.%20Anderson"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/movies?page=0&size=100",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The response array contains 100 objects\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.content).to.have.lengthOf(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/movies?page=0&size=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "100"
 						}
 					]
 				}

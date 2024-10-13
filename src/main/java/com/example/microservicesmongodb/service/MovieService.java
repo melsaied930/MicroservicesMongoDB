@@ -3,6 +3,10 @@ package com.example.microservicesmongodb.service;
 
 import com.example.microservicesmongodb.records.Movie;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,8 +23,12 @@ public class MovieService {
         this.template = template;
     }
 
-    public List<Movie> findAll() {
-        return template.findAll(Movie.class);
+    public Page<Movie> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Query query = new Query().with(pageable);
+        List<Movie> movies = template.find(query, Movie.class);
+        long total = template.count(new Query(), Movie.class);
+        return new PageImpl<>(movies, pageable, total);
     }
 
     public Movie findById(String id) {
