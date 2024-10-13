@@ -61,4 +61,13 @@ public class MovieController {
         }
         return ResponseEntity.ok(movies);
     }
+
+    @GetMapping("/by-cast")
+    public ResponseEntity<List<Movie>> getMoviesByCast(@RequestParam List<String> cast) {
+        List<Movie> movies = service.getMoviesByCast(cast);
+        if (movies.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(movies);
+    }
 }

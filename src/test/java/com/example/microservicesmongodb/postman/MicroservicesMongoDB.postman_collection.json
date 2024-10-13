@@ -243,6 +243,55 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/movies/by-cast?cast=A.C",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Count of objects in the response is greater than 0\", function () {",
+							"    pm.expect(pm.response.json().length).to.be.greaterThan(0);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/by-cast?cast=A.C.%20Abadie&cast=Gilbert%20M.%20Anderson",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"by-cast"
+					],
+					"query": [
+						{
+							"key": "cast",
+							"value": "A.C.%20Abadie"
+						},
+						{
+							"key": "cast",
+							"value": "Gilbert%20M.%20Anderson"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

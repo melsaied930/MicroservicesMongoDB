@@ -53,4 +53,10 @@ public class MovieService {
         Query query = new Query(Criteria.where("year").gte(startYear).lte(endYear));
         return template.find(query, Movie.class);
     }
+
+    // Find movies by one or more cast members
+    public List<Movie> getMoviesByCast(List<String> cast) {
+        Query query = new Query(Criteria.where("cast").in(cast));
+        return template.find(query, Movie.class);
+    }
 }
