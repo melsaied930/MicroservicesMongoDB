@@ -176,7 +176,7 @@ public class Application {
         System.out.println("\n----- Delete One Document -----");
         Bson query = Filters.eq("_id", id);
         DeleteResult result = collection.deleteOne(query);
-        System.out.printf(result.wasAcknowledged() ? "Document deleted status: %s\n" : " No document found.", result.toString());
+        System.out.printf(result.wasAcknowledged() ? "Document deleted status: %s\n" : " No document found.", result);
     }
 
     private static void updateMany(MongoCollection<Document> collection) {
