@@ -8,7 +8,19 @@ import org.springframework.context.annotation.Configuration;
 public class AppRunner {
 
     @Bean
-    CommandLineRunner run(ExampleService exampleService) {
-        return args -> exampleService.start();
+    CommandLineRunner run(
+            MongoDB_CRUD_Operations crud,
+            MongoDB_Transactions_Operations transactions,
+            MongoDB_Aggregation_Operations aggregation
+    ) {
+        return args -> {
+
+            crud.start();
+
+            transactions.start();
+
+            aggregation.start();
+
+        };
     }
 }

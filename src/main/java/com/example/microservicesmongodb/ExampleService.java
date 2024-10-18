@@ -1,34 +1,29 @@
 package com.example.microservicesmongodb;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ExampleService {
 
-    private final MongoCollection<Document> collection;
+    private final MongoCollection<Document> moviesCollection;
+    private final MongoCollection<Document> commentsCollection;
 
-    public ExampleService(MongoCollection<Document> collection) {
-        this.collection = collection;
+    public ExampleService(
+            MongoCollection<Document> moviesCollection,
+            MongoCollection<Document> commentsCollection) {
+        this.moviesCollection = moviesCollection;
+        this.commentsCollection = commentsCollection;
     }
 
-    public void start() {
-        insertSampleDocument();
+    public void queryMovies() {
+        Document movie = moviesCollection.find().first();
+        System.out.println("First Movie: " + movie);
     }
 
-    public void insertSampleDocument() {
-        Bson query = Filters.eq("year", "2014");
-        Bson projection = Projections.fields(
-                Projections.include("title", "released", "year", "type"),
-                Projections.excludeId());
-        Document document = collection.
-                find(query)
-                .projection(projection)
-                .first();
-        System.out.println(document);
+    public void queryComments() {
+        Document comment = commentsCollection.find().first();
+        System.out.println("First Comment: " + comment);
     }
 }

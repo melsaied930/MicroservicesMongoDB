@@ -18,9 +18,6 @@ public class MongoConfig {
     @Value("${spring.data.mongodb.database}")
     private String databaseName;
 
-    @Value("${spring.data.mongodb.collection}")
-    private String collectionName;
-
     @Bean
     public MongoClient mongoClient() {
         return MongoClients.create(mongoUri);
@@ -31,8 +28,18 @@ public class MongoConfig {
         return mongoClient.getDatabase(databaseName);
     }
 
-    @Bean
-    public MongoCollection<Document> mongoCollection(MongoDatabase mongoDatabase) {
-        return mongoDatabase.getCollection(collectionName);
+    @Bean(name = "moviesCollection")
+    public MongoCollection<Document> moviesCollection(MongoDatabase mongoDatabase) {
+        return mongoDatabase.getCollection("movies");
+    }
+
+    @Bean(name = "commentsCollection")
+    public MongoCollection<Document> commentsCollection(MongoDatabase mongoDatabase) {
+        return mongoDatabase.getCollection("comments");
+    }
+
+    @Bean(name = "usersCollection")
+    public MongoCollection<Document> usersCollection(MongoDatabase mongoDatabase) {
+        return mongoDatabase.getCollection("users");
     }
 }
