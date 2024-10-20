@@ -9,6 +9,8 @@ services:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+      - ./dump:/dump
+      - ./init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
     restart: always
 
   mongo-express:
