@@ -6,7 +6,6 @@ import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.BsonField;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
-import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Service;
@@ -32,20 +31,27 @@ public class MongoDB_Aggregation_Operations {
     }
 
     private void aggregateMoviesInYear() {
-        System.out.println("\n----- MongoDB Aggregation Movies In Year -----");
+        System.out.println("\n----- MongoDB Aggregation: Movies Grouped by Year, Projected, and Sorted -----");
 
+        // Match Stage: Ensure 'year' field exists
+        Bson matched = Aggregates.match(Filters.exists("year"));
 
-        Bson query = Filters.exists("year");
+        // Group Stage: Group by 'year' field and count occurrences
+        BsonField countField = new BsonField("count", new Document("$sum", 1));
+        Bson grouped = Aggregates.group("$year", countField);
 
-        Bson matched = Aggregates.match(query);
-        Document document = new Document("$sum", 1);
-        BsonField bsonField = new BsonField("count", document);
+        // Sort Stage: Sort by year in ascending order
+        Bson sorted = Aggregates.sort(new Document("_id", 1)); // _id holds the year after grouping
 
-        Bson sort = Sorts.ascending("count");
+        // Projection Stage: Reshape the output fields
+        Bson projection = Aggregates.project(
+                new Document("_id", 0) // Exclude the _id field (optional)
+                        .append("year", "$_id") // Rename _id to 'year'
+                        .append("count", 1) // Include the 'count' field
+        );
 
-        Bson grouped = Aggregates.group("$year", bsonField);
-
-        collection.aggregate(Arrays.asList(matched,grouped)).forEach(System.out::println);
+        // Execute Aggregation Pipeline
+        collection.aggregate(Arrays.asList(matched, grouped, sorted, projection)).forEach(System.out::println);
     }
 
     private void aggregateSortAndProject() {

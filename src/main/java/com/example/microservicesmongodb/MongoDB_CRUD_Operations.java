@@ -65,6 +65,8 @@ public class MongoDB_CRUD_Operations {
     private void updateMany() {
         System.out.println("\n----- Update Many Documents in Collection -----");
 
+//        db.movies.updateMany({ year: { $type: "string" } }, [{$set: { year: { $toInt: { $arrayElemAt: [ { $split: [ { $trim: { input: "$year", chars: "è" } }, "è" ] }, 0]}}}}]);
+
         Bson query = Filters.regex("title", "^Sample.*");
         Bson projection = Projections.fields(
                 Projections.include("title", "year", "type"),
