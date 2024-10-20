@@ -1,0 +1,2 @@
+# Run the init script every hour
+0 * * * * /docker-entrypoint-initdb.d/init-script.sh >> /var/log/mongo-cron.log 2>&1
