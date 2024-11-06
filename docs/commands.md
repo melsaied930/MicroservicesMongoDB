@@ -1,4 +1,12 @@
-   **Build the custom MongoDB image**:
+**Rebuild and Restart the Containers**
+   After applying the above changes, rebuild and restart the containers:
+
+   ```bash
+   docker-compose down
+   docker-compose up --build
+   ```
+Verify that MongoDB and Mongo Express are working by accessing the Mongo Express UI at http://localhost:8081.
+**Build the custom MongoDB image**:
    ```bash
    docker compose build
    ```
@@ -54,6 +62,22 @@
    ```bash
    docker-compose restart
    ```
+---
+
+
+
+
+
+
+
+
+
+
+### **Verify Replica Set Status**
+
+```bash
+docker exec -it mongodb-container mongosh -u admin -p admin --authenticationDatabase admin --eval "rs.status()"
+```
 ---
 
 #### To **kill the process using port 8080** on macOS with **one command**, you can use the following:

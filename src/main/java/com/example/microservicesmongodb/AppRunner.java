@@ -11,9 +11,12 @@ public class AppRunner {
     CommandLineRunner run(
             MongoDB_CRUD_Operations crud,
             MongoDB_Transactions_Operations transactions,
-            MongoDB_Aggregation_Operations aggregation
+            MongoDB_Aggregation_Operations aggregation,
+            MongoDB_FIND_Operations find
     ) {
         return args -> {
+
+            find.start();
 
             crud.start();
 
